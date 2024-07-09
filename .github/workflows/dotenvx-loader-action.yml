@@ -1,0 +1,28 @@
+name: dotenvx-action testing rig
+
+on:
+  push:
+    paths:
+      - .env
+      - .env.ci
+      - .github/workflows/dotenvx-loader-action.yml
+
+jobs:
+  meta:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Load meta secrets for .env.ci
+        uses: andreijiroh-dev/dotenvx-action@v0.2.0
+        id: dotenvx
+        with:
+          path: .env.ci
+          key: ${{ secrets.DOTENV_PRIVATE_KEY_CI }} # for .env.ci
+          # optional if you need them in scripts involve requiring access to secrets via env vars
+          inject-env-vars: "true"
+      - name: Try authenicating with Docker
+        uses: docker/login-action@v3
+        with:
+          registry: quay.io
+          username: ${{ steps.dotenvx.outputs.RHQCR_BOT_USERNAME }}
+          password: ${{ steps.dotenvx.outputs.RHQCR_BOT_PASSWORD }}
