@@ -1,0 +1,24 @@
+{
+  "name": "@andreijiroh-dev/dotenv-tools",
+  "description": "CLI tooling for managing a centralized repository for storing secrets, backed by dotenvx CLI library",
+  "version": "0.1.0",
+  "bin": "dotenv-tools.js",
+  "scripts": {
+    "cli": "node ./dotenv-tools.js"
+  },
+  "dependencies": {
+    "@actions/core": "^1.10.1",
+    "@dotenvx/dotenvx": "https://github.com/dotenvx/dotenvx/archive/refs/tags/v1.5.0.tar.gz",
+    "@octokit/rest": "^21.0.0",
+    "commander": "^12.1.0",
+    "execa": "^9.3.0",
+    "libsodium-wrappers": "^0.7.14",
+    "which": "^4.0.0"
+  },
+  "type": "module",
+  "author": {
+    "email": "ajhalili2006@andriejiroh.xyz",
+    "name": "Andrei Jiroh Halili"
+  },
+  "license": "BSD-3-Clause AND MPL-2.0"
+}

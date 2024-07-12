@@ -1,0 +1,24 @@
+{
+  "name": "@andreijiroh-dev/dotenvx-secretstore",
+  "version": "0.0.0",
+  "description": "A git-backed experiment with using dotenvx for managing CI/prod secrets. Kinda similar to using `gopass`, but without the GPG/SSH key wrangling and web-based dashboard chaos.",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "cli": "node ./tools/dotenv-tools.js",
+    "cli:dotenv-tools": "node ./tools/dotenv-tools.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://mau.dev/andreijiroh-dev/dotenvx-secretstore"
+  },
+  "author": "",
+  "license": "MPL-2.0",
+  "workspaces": [
+    "tools"
+  ],
+  "dependencies": {
+    "@andreijiroh-dev/dotenv-tools": "./tools"
+  }
+}
