@@ -40,7 +40,7 @@
  */
 
 import { Command } from "commander";
-import { decrypt } from "./commands/decrypt.js";
+import decrypt from "@dotenvx/dotenvx/src/cli/actions/decrypt.js";
 import encrypt from "@dotenvx/dotenvx/src/cli/actions/encrypt.js";
 import { pkgMetadata } from "./lib/constants.js";
 import { dotenvxCli } from "./commands/dotenvx.js";
@@ -49,6 +49,7 @@ import { setLogLevel } from "@dotenvx/dotenvx/src/shared/logger.js";
 import { collectEnvs, envs } from "./lib/env.js"
 import upstreamMetadata from '@dotenvx/dotenvx/src/lib/helpers/packageJson.js'
 import executeCommand from "@dotenvx/dotenvx/src/cli/actions/run.js";
+import { tbdPlaceholder } from "./lib/placeholders.js";
 
 const program = new Command();
 
@@ -71,6 +72,12 @@ program
 program.command("init")
     .description("setup a fresh centralized git repo for dotenvx management")
     .alias("setup")
+    .action(tbdPlaceholder)
+
+program.command("push")
+    .description("push secrets from a project into its git repo")
+    .alias("deploy")
+    .action(tbdPlaceholder)
 
 program.command("encrypt")
     .description("convert .env file(s) to encrypted .env file(s)")
@@ -79,13 +86,17 @@ program.command("encrypt")
     .action(encrypt)
     .alias("enc")
 
-program.command("decrypt")
-    .description("convert encrypted .env file(s) into plain .env file(s)")
-    .argument("[file]", "file path to write decrypted secrets, otherwise print to console")
-    .option('-f, --env-file <paths...>', 'path(s) to your env file(s)')
-    .option('-k, --key <keys...>', 'keys(s) to encrypt (default: all keys in file)')
-    .action(decrypt)
-    .alias("dec")
+program
+  .command("decrypt")
+  .description("convert encrypted .env file(s) to plain .env file(s)")
+  .option("-f, --env-file <paths...>", "path(s) to your env file(s)")
+  .option(
+    "-k, --key <keys...>",
+    "keys(s) to encrypt (default: all keys in file)"
+  )
+  .option("--stdout", "send to stdout")
+  .action(decrypt)
+  .alias("dec");
 
 program.command("run")
   .description("inject env at runtime")

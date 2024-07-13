@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@actions/core": "^1.10.1",
-    "@dotenvx/dotenvx": "https://github.com/dotenvx/dotenvx/archive/refs/tags/v1.5.0.tar.gz",
+    "@dotenvx/dotenvx": "https://github.com/dotenvx/dotenvx/archive/refs/tags/v1.6.2.tar.gz",
     "@octokit/rest": "^21.0.0",
     "commander": "^12.1.0",
     "execa": "^9.3.0",
@@ -20,5 +20,9 @@
     "email": "ajhalili2006@andriejiroh.xyz",
     "name": "Andrei Jiroh Halili"
   },
-  "license": "BSD-3-Clause AND MPL-2.0"
+  "license": "BSD-3-Clause AND MPL-2.0",
+  "funding": [
+    "https://github.com/sponsor/ajhalili2006",
+    "https://sponsors.andreijiroh.xyz"
+  ]
 }

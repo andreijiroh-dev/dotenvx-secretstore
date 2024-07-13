@@ -57,6 +57,57 @@ dotenvxCli
 
 
 import get from "@dotenvx/dotenvx/src/cli/actions/get.js"
+import set from "@dotenvx/dotenvx/src/cli/actions/set.js"
+import decrypt from "@dotenvx/dotenvx/src/cli/actions/decrypt.js";
+import run from "@dotenvx/dotenvx/src/cli/actions/run.js";
+import encrypt from "@dotenvx/dotenvx/src/cli/actions/encrypt.js";
+import * as examples from "@dotenvx/dotenvx/src/cli/examples.js"
+import { logger } from "@dotenvx/dotenvx/src/shared/logger.js";
+dotenvxCli
+  .command("run")
+  .description("inject env at runtime [dotenvx run -- yourcommand]")
+  .addHelpText("after", examples.run)
+  .option(
+    "-e, --env <strings...>",
+    'environment variable(s) set as string (example: "HELLO=World")',
+    collectEnvs("env"),
+    []
+  )
+  .option(
+    "-f, --env-file <paths...>",
+    "path(s) to your env file(s)",
+    collectEnvs("envFile"),
+    []
+  )
+  .option(
+    "-fv, --env-vault-file <paths...>",
+    "path(s) to your .env.vault file(s)",
+    collectEnvs("envVaultFile"),
+    []
+  )
+  .option("-o, --overload", "override existing env variables")
+  .option(
+    "--convention <name>",
+    "load a .env convention (available conventions: ['nextjs'])"
+  )
+  .action(function (...args) {
+    this.envs = envs;
+
+    run.apply(this, args);
+  });
+
+dotenvxCli
+  .command("set")
+  .description("set a single environment variable")
+  .addHelpText("after", examples.set)
+  .allowUnknownOption()
+  .argument("KEY", "KEY")
+  .argument("value", "value")
+  .option("-f, --env-file <paths...>", "path(s) to your env file(s)", ".env")
+  .option("-c, --encrypt", "encrypt value (default: true)", true)
+  .option("-p, --plain", "store value as plain text", false)
+  .action(set);
+
 dotenvxCli.command("get")
     .description('return a single environment variable')
     .argument('[key]', 'environment variable name')
@@ -73,4 +124,45 @@ dotenvxCli.command("get")
         get.apply(this, args)
     })
 
+.command("encrypt")
+    .description("convert .env file(s) to encrypted .env file(s)")
+    .option('-f, --env-file <paths...>', 'path(s) to your env file(s)')
+    .option('-k, --key <keys...>', 'keys(s) to encrypt (default: all keys in file)')
+    .option("--stdout", "send to stdout")
+    .action(encrypt)
+    .alias("enc")
+
+dotenvxCli
+  .command("decrypt")
+  .description("convert encrypted .env file(s) to plain .env file(s)")
+  .option("-f, --env-file <paths...>", "path(s) to your env file(s)")
+  .option(
+    "-k, --key <keys...>",
+    "keys(s) to encrypt (default: all keys in file)"
+  )
+  .option("--stdout", "send to stdout")
+  .action(decrypt)
+  .alias("dec");
+
+
+// TODO: Add ent command in the future once added upstream
+dotenvxCli
+  .command("pro")
+  .description("🏆 pro (coming soon!)")
+  .action(function (...args) {
+    try {
+      // execute `dotenvx-pro` if available
+      execSync("dotenvx-pro", { stdio: ["inherit", "inherit", "ignore"] });
+    } catch (_error) {
+      logger.warn(
+        "upstream: dotenvx pro -- coming soon for small businesses"
+      );
+      logger.help(
+        "upstream: learn more / subscribe to get notified: [https://github.com/dotenvx/dotenvx/issues/259]"
+      );
+      logger.success("upstream: thank you for using dotenvx (from: @motdotla) - [https://github.com/sponsors/motdotla]");
+    }
+  });
+
+// load cli extensions too
 dotenvxCli.addCommand(dotenvxCliExt)

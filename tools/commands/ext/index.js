@@ -43,10 +43,11 @@ import path from "node:path"
 import { spawnSync } from "node:child_process";
 
 dotenvxCliExt
-  .description('dotenvx extensions')
+  .description('dotenvx extensions (experiential in dotenv-tools')
+  .aliases([
+    "extensions"
+  ])
   .allowUnknownOption()
-
-dotenvxCliExt.addHelpText('after', '  hub                               🚫 DEPRECATED: to be replaced by [dotenv-tools dotenvx pro]')
 
 dotenvxCliExt
   .argument('[command]', 'dynamic ext command')
@@ -71,15 +72,14 @@ dotenvxCliExt
 
     const result = spawnSync(`dotenvx-ext-${command}`, forwardedArgs, { stdio: 'inherit', env })
     if (result.error) {
-      if (command === 'hub') {
-        logger.warn(`🚫 hub subcommand is disabled here, to be replaced by dotenvx-pro features`)
-        logger.help('? subscribe on github to be notified / learn more [https://github.com/dotenvx/dotenvx/issues/259]')
-      } else {
-        logger.info(`error: unknown command '${command}'`)
-      }
+      logger.info(`error: unknown command '${command}'`)
     }
 
     if (result.status !== 0) {
       process.exit(result.status)
     }
   })
+
+dotenvxCliExt.command('scan')
+  .description('scan for leaked secrets [powered by gitleaks cli]')
+  .action(await import('@dotenvx/dotenvx/src/cli/actions/ext/scan.js'))

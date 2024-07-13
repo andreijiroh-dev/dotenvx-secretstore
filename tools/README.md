@@ -28,7 +28,7 @@ npx @andreijiroh-dev/dotenv-tools
 ```bash
 git clone https://mau.dev/andreijiroh-dev/dotenvx-secretstore
 cd dotenvx-secretstore/tools
-npm link .--local .
+npm link --local .
 
 # update via git
 git pull --ff-only
