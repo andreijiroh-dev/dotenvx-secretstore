@@ -49,7 +49,8 @@ import { setLogLevel } from "@dotenvx/dotenvx/src/shared/logger.js";
 import { collectEnvs, envs } from "./lib/env.js"
 import upstreamMetadata from '@dotenvx/dotenvx/src/lib/helpers/packageJson.js'
 import executeCommand from "@dotenvx/dotenvx/src/cli/actions/run.js";
-import { tbdPlaceholder } from "./lib/placeholders.js";
+import { commandDisabled, tbdPlaceholder } from "./lib/placeholders.js";
+import { setupRepo } from "./commands/init.js";
 
 const program = new Command();
 
@@ -71,8 +72,12 @@ program
 
 program.command("init")
     .description("setup a fresh centralized git repo for dotenvx management")
+    .option("-c, --copy-missing", "only copy missing files")
+    .option("-o, --overwrite, --override", "overwrite existing files")
+    .option("-b, --default-branch, --branch", "default branch name for 'git init'", "main")
+    .argument("[directory]", "directory where files will be copied")
     .alias("setup")
-    .action(tbdPlaceholder)
+    .action(setupRepo)
 
 program.command("push")
     .description("push secrets from a project into its git repo")
@@ -97,6 +102,10 @@ program
   .option("--stdout", "send to stdout")
   .action(decrypt)
   .alias("dec");
+
+program.command("hub")
+  .description("DEPRECATED: moved to dotenvx ext hub")
+  .action(commandDisabled)
 
 program.command("run")
   .description("inject env at runtime")
