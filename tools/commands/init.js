@@ -38,3 +38,48 @@
  * 
  * SPDX-License-Identifier: BSD-3-Clause AND MPL-2.0
  */
+import { logger } from "@dotenvx/dotenvx/src/shared/logger.js";
+import { cp, copyFile } from "fs/promises"
+import { existsSync, openSync } from "fs";
+import path from "node:path"
+import { fileURLToPath } from "url";
+
+const templatePath = fileURLToPath(
+  path.join(import.meta.url, "../../template"));
+
+function checkIfExists(file) {
+    if (!existsSync(file)) {
+        return false
+    }
+    return true
+}
+
+async function copyOrOverride(file, override) {
+    if (!checkIfExists(file)) {
+        await copyFile(`${templatePath}/README.md`, `${pwd}/README.md`)
+    }
+}
+
+export async function setupRepo(directory) {
+    logger.debug(`directory: ${directory}`);
+    const options = this.opts();
+    logger.debug(`options: ${JSON.stringify(options)}`);
+    let pwd = process.cwd()
+
+    if (directory == null && options.copyMissing !== true) {
+        logger.warn("you can't use this command without adding `--copy-missing` flag in this directory")
+        process.exit(1)
+    } else if (directory == null && options.copyMissing == true) {
+        if (!checkIfExists(`${pwd}/.env`)) {
+            logger.verbose("creating blank .env")
+            openSync(`${pwd}/.env`, "a");
+        }
+
+        if (!checkIfExists(`${pwd}/README.md`)) {
+            logger.verbose(`copying template README from "${templatePath}/README.md"`)
+            await copyFile(`${templatePath}/README.md`, `${pwd}/README.md`)
+        }
+    } else {
+        await cp(templatePath, destdir, { recursive: true, force: true });
+    }
+}
