@@ -39,7 +39,7 @@
  * SPDX-License-Identifier: BSD-3-Clause AND MPL-2.0
  */
 
-import { Command, program } from "commander";
+import { Command } from "commander";
 import { collectEnvs, envs } from "../lib/env.js";
 export const dotenvxCli = new Command("dotenvx")
 import { dotenvxCliExt } from "./ext/index.js";
@@ -50,6 +50,26 @@ dotenvxCli
     .description("access dotenvx cli features via dotenv-tools (experimential)")
     .version(`${upstreamMetadata.version} (@andreijiroh-dev/dotenv-tools@v${pkgMetadata.version})`)
 
+
+import get from "@dotenvx/dotenvx/src/cli/actions/get.js";
+import set from "@dotenvx/dotenvx/src/cli/actions/set.js";
+import decrypt from "@dotenvx/dotenvx/src/cli/actions/decrypt.js";
+import run from "@dotenvx/dotenvx/src/cli/actions/run.js";
+import encrypt from "@dotenvx/dotenvx/src/cli/actions/encrypt.js";
+import * as examples from "@dotenvx/dotenvx/src/cli/examples.js";
+import { logger, setLogLevel } from "@dotenvx/dotenvx/src/shared/logger.js";
+
+dotenvxCli
+  .option("-l, --log-level <level>", "set log level", "info")
+  .option("-q, --quiet", "sets log level to error")
+  .option("-v, --verbose", "sets log level to verbose")
+  .option("-d, --debug", "sets log level to debug")
+  .hook("preAction", (thisCommand, actionCommand) => {
+    const options = thisCommand.opts();
+
+    setLogLevel(options);
+  });
+
 dotenvxCli
     .action((command, args, cmdObj) => {
       if (!command) {
@@ -58,14 +78,6 @@ dotenvxCli
       }
     })
 
-
-import get from "@dotenvx/dotenvx/src/cli/actions/get.js"
-import set from "@dotenvx/dotenvx/src/cli/actions/set.js"
-import decrypt from "@dotenvx/dotenvx/src/cli/actions/decrypt.js";
-import run from "@dotenvx/dotenvx/src/cli/actions/run.js";
-import encrypt from "@dotenvx/dotenvx/src/cli/actions/encrypt.js";
-import * as examples from "@dotenvx/dotenvx/src/cli/examples.js"
-import { logger } from "@dotenvx/dotenvx/src/shared/logger.js";
 dotenvxCli
   .command("run")
   .description("inject env at runtime [dotenvx run -- yourcommand]")
