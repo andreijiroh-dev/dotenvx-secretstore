@@ -129,5 +129,5 @@ export async function setupRepo(directory) {
         force: options.overwrite || false,
       });
     }
-    git.init({ fs, dir: pwd, defaultBranch: "main" }).then(logger.success(`successfully initialized git repo`));
+    git.init({ fs, dir: directory, defaultBranch: "main" }).then(logger.success(`successfully initialized git repo`));
 }
