@@ -3,8 +3,7 @@
   "description": "CLI tooling for managing a centralized repository for storing secrets, backed by dotenvx CLI library",
   "version": "0.1.0",
   "bin": {
-    "dotenv-tools": "dotenv-tools.js",
-    "dotenvx": "commands/dotenvx.js"
+    "dotenv-tools": "dotenv-tools.js"
   },
   "scripts": {
     "cli": "node ./dotenv-tools.js"

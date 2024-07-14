@@ -182,4 +182,4 @@ dotenvxCli
 // load cli extensions too
 dotenvxCli.addCommand(dotenvxCliExt)
 
-dotenvxCli.parse(process.argv)
+//dotenvxCli.parse(process.argv)
