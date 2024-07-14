@@ -33,7 +33,8 @@
  *   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  *   OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  *   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
+ * SPDX-License-Identifier: BSD-3-Clause AND MPL-2.0
  */
 
 import { logger } from "@dotenvx/dotenvx/src/shared/logger.js";
@@ -41,9 +42,11 @@ import { Command } from "commander";
 export const dotenvxCliExt = new Command("ext")
 import path from "node:path"
 import { spawnSync } from "node:child_process";
+import examples from "@dotenvx/dotenvx/src/cli/examples.js"
+import { vault } from "./vault.js";
 
 dotenvxCliExt
-  .description('dotenvx extensions (experiential in dotenv-tools')
+  .description('dotenvx extensions (experiential in dotenv-tools)')
   .aliases([
     "extensions"
   ])
@@ -80,6 +83,56 @@ dotenvxCliExt
     }
   })
 
-dotenvxCliExt.command('scan')
+
+// dotenvx ext ls
+dotenvxCliExt.command("ls")
+  .description("print all .env files in a tree structure")
+  .argument("[directory]", "directory to list files", ".")
+  .option("-f, --env-file <filenames...>", "path(s) to your .env file(s)")
+  .action(await import("@dotenvx/dotenvx/src/cli/actions/ext/ls.js"))
+
+// dotenvx ext scan
+dotenvxCliExt.command("scan")
   .description('scan for leaked secrets [powered by gitleaks cli]')
   .action(await import('@dotenvx/dotenvx/src/cli/actions/ext/scan.js'))
+
+// dotenvx ext genexample
+dotenvxCliExt
+  .command("genexample")
+  .description("generate .env.example")
+  .argument("[directory]", "directory to generate from", ".")
+  .option("-f, --env-file <paths...>", "path(s) to your env file(s)", ".env")
+  .action(await import("@dotenvx/dotenvx/src/cli/actions/ext/genexample.js"));
+
+// dotenvx ext gitignore
+dotenvxCliExt
+  .command("gitignore")
+  .description(
+    "append to .gitignore file (and if existing, .dockerignore, .npmignore, and .vercelignore)"
+  )
+  .addHelpText("after", examples.gitignore)
+  .action(await import("@dotenvx/dotenvx/src/cli/actions/ext/gitignore.js"));
+
+
+// dotenvx ext prebuild
+dotenvxCliExt.command('prebuild')
+  .description('prevent including .env files in docker builds')
+  .addHelpText('after', examples.prebuild)
+  .action(await import('@dotenvx/dotenvx/src/cli/actions/ext/prebuild.js'))
+
+// dotenvx ext precommit
+dotenvxCliExt.command('precommit')
+  .description('prevent committing .env files to code')
+  .addHelpText('after', examples.precommit)
+  .option('-i, --install', 'install to .git/hooks/pre-commit')
+  .action(await import('@dotenvx/dotenvx/src/cli/actions/ext/precommit.js'))
+
+// dotenvx ext settings
+dotenvxCliExt
+  .command("settings")
+  .description("print current dotenvx settings")
+  .argument("[key]", "settings name")
+  .option("-pp, --pretty-print", "pretty print output")
+  .action(await import("@dotenvx/dotenvx/src/cli/actions/ext/settings.js"));
+
+dotenvxCliExt.addCommand(vault)

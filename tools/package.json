@@ -2,7 +2,10 @@
   "name": "@andreijiroh-dev/dotenv-tools",
   "description": "CLI tooling for managing a centralized repository for storing secrets, backed by dotenvx CLI library",
   "version": "0.1.0",
-  "bin": "dotenv-tools.js",
+  "bin": {
+    "dotenv-tools": "dotenv-tools.js",
+    "dotenvx": "commands/dotenvx.js"
+  },
   "scripts": {
     "cli": "node ./dotenv-tools.js"
   },
@@ -12,6 +15,7 @@
     "@octokit/rest": "^21.0.0",
     "commander": "^12.1.0",
     "execa": "^9.3.0",
+    "isomorphic-git": "^1.27.1",
     "libsodium-wrappers": "^0.7.14",
     "which": "^4.0.0"
   },

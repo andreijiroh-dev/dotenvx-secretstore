@@ -39,13 +39,16 @@
  * SPDX-License-Identifier: BSD-3-Clause AND MPL-2.0
  */
 
-import { Command } from "commander";
+import { Command, program } from "commander";
 import { collectEnvs, envs } from "../lib/env.js";
 export const dotenvxCli = new Command("dotenvx")
 import { dotenvxCliExt } from "./ext/index.js";
+import { pkgMetadata } from "../lib/constants.js";
+import upstreamMetadata from "@dotenvx/dotenvx/src/lib/helpers/packageJson.js";
 
 dotenvxCli
     .description("access dotenvx cli features via dotenv-tools (experimential)")
+    .version(`${upstreamMetadata.version} (@andreijiroh-dev/dotenv-tools@v${pkgMetadata.version})`)
 
 dotenvxCli
     .action((command, args, cmdObj) => {
@@ -166,3 +169,5 @@ dotenvxCli
 
 // load cli extensions too
 dotenvxCli.addCommand(dotenvxCliExt)
+
+dotenvxCli.parse(process.argv)
