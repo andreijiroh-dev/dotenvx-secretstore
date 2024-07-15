@@ -11,7 +11,14 @@ export async function getRootDir() {
 
 export async function stageAndCommit(file, message, skipCommit) {
     let dir = await getRootDir();
-    await git.add({ fs, directory, file });
+    if (typeof file == "object") {
+        for (const targetFile of file) {
+            logger.info(`staging ${targetFile}`)
+            await git.add({ fs, directory, file: targetFile });
+        }
+    } else {
+        await git.add({ fs, directory, file });
+    }
     if (!skipCommit || skipCommit == false) {
         await git.commit({
           fs,
