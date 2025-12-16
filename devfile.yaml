@@ -1,0 +1,10 @@
+schemaVersion: 2.2.2
+metadata:
+  name: "dotenvx-secretstore"
+  projectType: Node.js
+  language: JavaScript
+components:
+  - name: dev
+    container:
+      image: quay.io/che-incubator/che-code-dev:insiders
+      sourceMapping: /workspaces/dotenvx-secretstore
